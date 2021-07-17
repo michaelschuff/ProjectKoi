@@ -25,7 +25,7 @@ Probably.<br><br>
 
 this probably only works for mac and even then probably not<br>
 
-Or you can just download from the releases. Whatever makes your natical vessel less dense than water. <br>
+Or you can just download from the releases. Whatever makes your nautical vessel less dense than water. <br>
 
 
 How to install:
