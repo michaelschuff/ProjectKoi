@@ -7,7 +7,10 @@ How to install manually:
 
 Download code and run make to generate the dylib files into bin.<br>
 To only use specific modules, generate each one individually by running<br>
-> make libkoi-MODULE_NAME.dylib<br>
+```zsh
+make libkoi-MODULE_NAME.dylib
+```
+<br>
 
 Where MODULE_NAME can be the following:
 
@@ -29,7 +32,9 @@ How to install:
 ---------------
 
 Run
-> make install
+```zsh
+make install
+```
 
 if you get an error I havent learned how to do it yet
 
