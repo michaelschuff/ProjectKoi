@@ -1,5 +1,5 @@
 CXX	:= g++
-CC	:= g++
+CC	:= gcc
 RM	:= rm -f
 
 PREFIX			:= /usr/local
@@ -30,8 +30,7 @@ NETWORKING_OBJ			:= $(patsubst $(SRC_DIR)/Networking/%.cpp,obj/%.o, $(NETWORKING
 
 
 LIBS_SRC				:= $(wildcard $(LIB_DIR)/*.cpp) $(wildcard $(LIB_DIR)/*.c)
-LIBS_OBJ				:= $(patsubst $(OBJ_DIR)/%.cpp,obj/%.o,$(LIBS_SRC)) $(patsubst $(OBJ_DIR)/%.c,obj/%.o,$(LIBS_SRC))
-
+LIBS_OBJ				:= $(patsubst $(LIB_DIR)/%.c,$(OBJ_DIR)/%.o,$(LIBS_SRC))
 
 
 
@@ -43,7 +42,7 @@ OPENGL			:= -framework OpenGL
 
 
 .PHONY: all install clean uninstall
-all: $(DIRS) $(BIN_DIR)/$(AUDIO) $(BIN_DIR)/$(GRAPHICS) $(BIN_DIR)/$(NETWORKING)
+all: $(DIRS) $(BIN_DIR)/$(GRAPHICS)#$(BIN_DIR)/$(AUDIO)  $(BIN_DIR)/$(NETWORKING)
 
 install: $(DIRS) $(KOI_DIR) $(LIBS_OBJ) $(KOI_DIR)/$(GRAPHICS)#$(KOI_DIR)/$(AUDIO)  $(KOI_DIR)/$(NETWORKING)
 
@@ -58,8 +57,8 @@ clean:
 %/libkoi-audio.dylib: $(AUDIO_OBJ)
 	$(CXX) -dynamiclib -o $@ $^
 	
-%/libkoi-graphics.dylib: $(GRAPHICS_OBJ) $(GLAD_OBJ)
-	$(CXX) -dynamiclib -o $@ $^ $(GLAD_OBJ) $(LDLIBS) $(OPENGL)
+%/libkoi-graphics.dylib: $(GRAPHICS_OBJ) $(LIBS_OBJ)
+	$(CXX) -dynamiclib -o $@ $^ $(LDLIBS) $(OPENGL)
 	
 %/libkoi-networking.dylib: $(NETWORKING_OBJ)
 	$(CXX) -dynamiclib -o $@ $^
@@ -72,15 +71,17 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/Graphics/%.cpp
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/Networking/%.cpp
 	$(CXX) -Iinclude/Networking -c -o $@ $<
+	
+	
 
-
-$(OBJ_DIR)/%.o: $(LIB_DIR)/%.c
-	$(CC) -c -o $@ $<
-
-
+	
+$(LIBS_OBJ): $(LIBS_SRC)
+	$(CXX) -c -o $@ $<
+	
+	
 $(DIRS):
 	mkdir -p $(DIRS)
 
 $(KOI_DIR):
-	mkdir -p /usr/local/lib/Koi
+	mkdir -p $@
 
